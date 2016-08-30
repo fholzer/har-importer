@@ -1,0 +1,17 @@
+{
+  "name": "import",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "elasticsearch": "^11.0.1",
+    "log4js": "^0.6.38",
+    "minimist": "^1.2.0",
+    "q": "^1.4.1"
+  }
+}
