@@ -1,6 +1,9 @@
 var q = require('q'),
     log = require('log4js').getLogger('index'),
-    argv = require('minimist')(process.argv.slice(2));
+    argv = require('minimist')(process.argv.slice(2)),
+    EsSender = require('./esSender'),
+    FileBrowser = require('./fileBrowser'),
+    HarParser = require('./harParser');
 
 var printUsage = function(e) {
     log.info("Usage: node " + __filename + " --source <source-name> --route <route-name> <directory>");
@@ -32,9 +35,12 @@ var es = new EsSender({
   log: 'info'
 });
 
+var parser = new HarParser();
 
-readrecursive(argv._[0])
-.then(flushDocumentBuffer)
+var browser = new FileBrowser(parser, es, argv.source, argv.route);
+
+browser.readRecursive(argv._[0])
+.then(es.flush)
 .then(function() {
     log.info("all processing finished");
 })

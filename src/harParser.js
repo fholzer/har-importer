@@ -14,13 +14,13 @@ var getNumCacheHist = function(entries) {
     return hits.length;
 };
 
-HarParser.prototype.parseHar = function(source route, data) {
+HarParser.prototype.parse = function(source, route, data) {
     var numhits = getNumCacheHist(data.har.log.entries);
     var docs = [{
-        type = pageload,
+        type: pageload,
         status: data.status,
         route: route,
-        source: source
+        source: source,
         date: data.har.log.pages[0].startedDateTime,
         onload: data.har.log.pages[0].pageTimings.onLoad,
         numhits: numhits

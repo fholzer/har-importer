@@ -5,12 +5,12 @@ const BUFFER_MAX_SIZE = 50;
 
 function pad(n) {
     return n < 10 ? '0' + n : n;
-};
+}
 
 var esSender = function(options) {
     this.es = new elasticsearch.Client(options);
     this.docBuffer = [];
-}
+};
 
 esSender.prototype.pushArray = function(docs) {
     var done = q();
@@ -18,11 +18,11 @@ esSender.prototype.pushArray = function(docs) {
         done.then(this.push(d));
     }
     return done;
-}
+};
 
 esSender.prototype.push = function(doc) {
-    if(typeof doc === "array") {
-        return pushArray(doc);
+    if(doc.constructor === Array) {
+        return this.pushArray(doc);
     }
     this.docBuffer.push(doc);
     if(this.docBuffer.length < BUFFER_MAX_SIZE) {
