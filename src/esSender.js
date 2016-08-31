@@ -1,6 +1,8 @@
 var elasticsearch = require('elasticsearch'),
     q = require('q');
 
+const BUFFER_MAX_SIZE = 50;
+
 function pad(n) {
     return n < 10 ? '0' + n : n;
 };
@@ -50,3 +52,5 @@ esSender.prototype.flush = function() {
     //log.debug(body);
     return q.ninvoke(es, "bulk", { body: body });
 };
+
+module.exports = esSender;

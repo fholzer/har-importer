@@ -1,3 +1,6 @@
+var HarParser = function() {
+
+};
 
 var getNumCacheHist = function(entries) {
     var hits = entries.filter(function(e) {
@@ -11,7 +14,7 @@ var getNumCacheHist = function(entries) {
     return hits.length;
 };
 
-var parseHar = function(source route, data) {
+HarParser.prototype.parseHar = function(source route, data) {
     var numhits = getNumCacheHist(data.har.log.entries);
     var docs = [{
         type = pageload,
@@ -24,4 +27,4 @@ var parseHar = function(source route, data) {
     }];
 };
 
-module.exports = parseHar;
+module.exports = HarParser;
