@@ -31,8 +31,8 @@ if(argv._.length != 1) {
 }
 
 var es = new EsSender({
-  host: 'localhost:9200',
-  log: 'info'
+    host: 'localhost:9200',
+    log: 'info'
 });
 
 var parser = new HarParser();
@@ -40,7 +40,9 @@ var parser = new HarParser();
 var browser = new FileBrowser(parser, es, argv.source, argv.route);
 
 browser.readRecursive(argv._[0])
-.then(es.flush)
+.then(function() {
+    return es.flush();
+})
 .then(function() {
     log.info("all processing finished");
 })

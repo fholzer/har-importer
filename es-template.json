@@ -1,0 +1,65 @@
+{
+  "order": 0,
+  "template": "pwt-*",
+  "settings": {
+    "index": {
+      "number_of_replicas": "0"
+    }
+  },
+  "mappings": {
+    "pageload": {
+      "properties": {
+        "date": {
+          "type": "date"
+        },
+        "route": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "source": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "loaded": {
+          "type": "boolean"
+        },
+        "loadtime": {
+          "type": "integer"
+        },
+        "numhits": {
+          "type": "short"
+        }
+      }
+    },
+    "request": {
+      "properties": {
+        "date": {
+          "type": "date"
+        },
+        "route": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "source": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "status": {
+          "type": "boolean"
+        },
+        "loadtime": {
+          "type": "integer"
+        },
+        "domain": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "url": {
+          "index": "not_analyzed",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "aliases": {}
+}

@@ -17,14 +17,16 @@ var getNumCacheHist = function(entries) {
 HarParser.prototype.parse = function(source, route, data) {
     var numhits = getNumCacheHist(data.har.log.entries);
     var docs = [{
-        type: pageload,
+        type: "pageload",
+        id: "someid",
         status: data.status,
         route: route,
         source: source,
         date: data.har.log.pages[0].startedDateTime,
-        onload: data.har.log.pages[0].pageTimings.onLoad,
+        loadtime: data.har.log.pages[0].pageTimings.onLoad,
         numhits: numhits
     }];
+    return docs;
 };
 
 module.exports = HarParser;

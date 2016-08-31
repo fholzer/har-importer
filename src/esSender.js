@@ -1,4 +1,5 @@
 var elasticsearch = require('elasticsearch'),
+    log = require('log4js').getLogger('EsSender'),
     q = require('q');
 
 const BUFFER_MAX_SIZE = 50;
@@ -12,7 +13,7 @@ var esSender = function(options) {
     this.docBuffer = [];
 };
 
-esSender.prototype.pushArray = function(docs) {
+esSender.prototype.pushMultiple = function(docs) {
     var done = q();
     for(var d of docs) {
         done.then(this.push(d));
@@ -22,13 +23,13 @@ esSender.prototype.pushArray = function(docs) {
 
 esSender.prototype.push = function(doc) {
     if(doc.constructor === Array) {
-        return this.pushArray(doc);
+        return this.pushMultiple(doc);
     }
     this.docBuffer.push(doc);
     if(this.docBuffer.length < BUFFER_MAX_SIZE) {
         return;
     }
-    return flushDocumentBuffer();
+    return this.flush();
 };
 
 esSender.prototype.flush = function() {
@@ -44,13 +45,18 @@ esSender.prototype.flush = function() {
         var date = new Date(Date.parse(d.date));
         d.date = date;
         var index = "pwt-" + date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
-        var type = d.type;
+        var type = d.type,
+            id = d.id;
         delete d.type;
+        delete d.id;
         body.push({ index: {_index: index, _type: type }});
+        /*log.info("DEBUG");
+        log.info(d);
+        process.exit(0);*/
         body.push(d);
     }
     //log.debug(body);
-    return q.ninvoke(es, "bulk", { body: body });
+    return q.ninvoke(this.es, "bulk", { body: body });
 };
 
 module.exports = esSender;

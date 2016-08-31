@@ -1,4 +1,4 @@
-var log = require('log4js').getLogger('index'),
+var log = require('log4js').getLogger('FileBrowser'),
     q = require('q'),
     path = require('path'),
     fs = require('fs'),
@@ -21,10 +21,17 @@ FileBrowser.prototype.processFiles = function(dirpath, files) {
     var done = q();
     for(var file of files) {
         done = done.then(function(file) {
-            return readfile(dirpath + path.sep + file, 'utf8')
+            var filename = dirpath + path.sep + file;
+            return readfile(filename , 'utf8')
             .then(function(data) {
-                var docs = self.harParser.parse(self.source, self.route, JSON.parse(data));
-                return self.es.pushMultiple(doc);
+                try {
+                    data = JSON.parse(data);
+                } catch(err) {
+                    log.error("Caught error file reading " + filename + ":", err);
+                    return;
+                }
+                var docs = self.harParser.parse(self.source, self.route, data);
+                return self.es.pushMultiple(docs);
             });
         }.bind(this, file));
     }
